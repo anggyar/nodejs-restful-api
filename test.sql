@@ -1,4 +1,0 @@
-SHOW TABLEs;
-DESCRIBE users;
-
-show TABLES;
