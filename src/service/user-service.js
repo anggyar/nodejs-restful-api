@@ -5,6 +5,13 @@ import { validate } from "../validation/validation";
 import * as bcrypt from "bcrypt";
 
 const register = async (request) => {
+    /**
+     * Ketika melakukan register, request yang masuk akan di validasi
+     * Data yagn di validasi akan dibuat menggunakan fungsi prismaClient, kemudian di buat berdasarkan nilai username.
+     * Apabila nilai username diketahui telah terdapat di database, maka akan memberikan response error 400 dan info bahwa username telah ada
+     * Lalu, passowrd dari user akan di lakukan hashing dengan fungsi bcrypt
+     * Hasil akan mengembalikan data yang benar dan menampilkan username dan name.
+     */
     const user = validate(registerUserValidation, request);
 
     // Cek user telah aktif atau tidak
@@ -20,13 +27,13 @@ const register = async (request) => {
 
     user.password = await bcrypt.hash(user.password, 10);
 
-    const result = await prismaClient.user.create({
+    return prismaClient.user.create({
         data: user,
         select: {
             username: true,
             name: true,
         },
     });
-
-    return result;
 };
+
+export default { register };
