@@ -1,4 +1,4 @@
-import userService from "../service/user-service";
+import userService from "../service/user-service.js";
 
 const register = async (req, res, next) => {
     try {
@@ -7,8 +7,8 @@ const register = async (req, res, next) => {
         res.status(200).json({
             data: result,
         });
-    } catch (error) {
-        next(error);
+    } catch (e) {
+        next(e);
     }
 };
 

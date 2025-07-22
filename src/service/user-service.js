@@ -1,7 +1,7 @@
-import { prismaClient } from "../application/database";
-import { ResponseError } from "../error/response-error";
-import { registerUserValidation } from "../validation/user-validation";
-import { validate } from "../validation/validation";
+import { prismaClient } from "../application/database.js";
+import { ResponseError } from "../error/response-error.js";
+import { registerUserValidation } from "../validation/user-validation.js";
+import { validate } from "../validation/validation.js";
 import * as bcrypt from "bcrypt";
 
 const register = async (request) => {
