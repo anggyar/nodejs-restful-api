@@ -5,5 +5,6 @@ const publicRouter = new express.Router(); //Memanggil fungsi Router dari Expres
 
 // userController bisa di call karena, menggunakan export default
 publicRouter.post("/api/users", userController.register); //Post /api/user dengan controller register.
+publicRouter.post("/api/users/login", userController.login);
 
 export { publicRouter };

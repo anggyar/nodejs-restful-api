@@ -4,6 +4,7 @@ const validate = (schema, request) => {
     // validate akan di pakai oleh Joi
     const result = schema.validate(request, {
         abortEarly: false,
+        allowUnknown: false, //reject unknwon field
     });
 
     if (result.error) {
