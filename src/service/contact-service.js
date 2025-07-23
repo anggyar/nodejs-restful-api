@@ -1,5 +1,9 @@
 import { prismaClient } from "../application/database.js";
-import { createContactValidation } from "../validation/contact-validation.js";
+import { ResponseError } from "../error/response-error.js";
+import {
+    createContactValidation,
+    getContactValidation,
+} from "../validation/contact-validation.js";
 import { validate } from "../validation/validation.js";
 
 const create = async (user, request) => {
@@ -19,6 +23,35 @@ const create = async (user, request) => {
     });
 };
 
+const get = async (user, contactId) => {
+    // validasi contact id
+    contactId = validate(getContactValidation, contactId);
+
+    // pilih hanya kontak yang di pilih
+    const contact = await prismaClient.contact.findFirst({
+        where: {
+            username: user.username,
+            id: contactId,
+        },
+        select: {
+            id: true,
+            first_name: true,
+            last_name: true,
+            email: true,
+            phone: true,
+        },
+    });
+
+    // pesan error kalau kontak tidak di temukan
+    if (!contact) {
+        throw new ResponseError(404, "Contact is not found");
+    }
+
+    // kembalikan kontak bila di temukan
+    return contact;
+};
+
 export default {
     create,
+    get,
 };
