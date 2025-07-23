@@ -84,3 +84,68 @@ describe("GET /api/contacts/:contactId", function () {
         expect(result.status).toBe(404);
     });
 });
+
+describe("PUT /api/contacts/:contactId", () => {
+    beforeEach(async () => {
+        await createTestUser();
+        await createTestContact();
+    });
+
+    afterEach(async () => {
+        await removeAllTestContacts();
+        await removeTestUser();
+    });
+
+    it("should can update existing contact ", async () => {
+        const testContact = await getTestContact();
+
+        const result = await supertest(web)
+            .put("/api/contacts/" + testContact.id)
+            .set("Authorization", "test")
+            .send({
+                first_name: "Anggy",
+                last_name: "M Yahya",
+                email: "anggy@mail.com",
+                phone: "082381126115",
+            });
+
+        expect(result.status).toBe(200);
+        expect(result.body.data.id).toBe(testContact.id);
+        expect(result.body.data.first_name).toBe("Anggy");
+        expect(result.body.data.last_name).toBe("M Yahya");
+        expect(result.body.data.email).toBe("anggy@mail.com");
+        expect(result.body.data.phone).toBe("082381126115");
+    });
+
+    it("should reject if request is invalid", async () => {
+        const testContact = await getTestContact();
+
+        const result = await supertest(web)
+            .put("/api/contacts/" + testContact.id)
+            .set("Authorization", "test")
+            .send({
+                first_name: "",
+                last_name: "",
+                email: "anggy",
+                phone: "",
+            });
+
+        expect(result.status).toBe(400);
+    });
+
+    it("should reject if contact is not found", async () => {
+        const testContact = await getTestContact();
+
+        const result = await supertest(web)
+            .put("/api/contacts/" + testContact.id + 1)
+            .set("Authorization", "test")
+            .send({
+                first_name: "Anggy",
+                last_name: "M Yahya",
+                email: "anggy@mail.com",
+                phone: "082381126115",
+            });
+
+        expect(result.status).toBe(404);
+    });
+});
